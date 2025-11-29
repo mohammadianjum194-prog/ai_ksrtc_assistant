@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -10,8 +9,6 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
-
-final FlutterTts flutterTts = FlutterTts();
 
 // ========================== APP ROOT ==========================
 
@@ -55,9 +52,6 @@ class RegisterPage extends StatelessWidget {
   void _register(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("isLoggedIn", true);
-
-    await flutterTts.setLanguage("en-IN");
-    await flutterTts.speak("Hello, I am Rocky. Registration successful.");
 
     Navigator.pushReplacement(
       context,
@@ -171,11 +165,7 @@ class _TripInputPageState extends State<TripInputPage> {
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.directions_bus),
                   label: const Text("CHECK LIVE KSRTC BUSES"),
-                  onPressed: () async {
-                    await flutterTts.setLanguage("en-IN");
-                    await flutterTts.speak(
-                        "Opening live KSRTC timetable for you");
-
+                  onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -255,8 +245,6 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
   }
 
   void _startBus() {
-    flutterTts.speak("Live tracking started");
-
     timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       setState(() {
         busLat += 0.001;
@@ -271,7 +259,6 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
             (busLng - destinationPoint.longitude).abs();
 
         if (dist < 0.003) {
-          flutterTts.speak("You have reached your destination");
           timer.cancel();
           etaMin = 0;
         }
