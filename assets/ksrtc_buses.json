@@ -1,0 +1,23 @@
+import os
+import json
+
+PDF_FOLDER = "ksrtc_pdfs"
+OUTPUT_FILE = "ksrtc_buses.json"
+
+bus_data = []
+
+for file in os.listdir(PDF_FOLDER):
+    if file.endswith(".pdf"):
+        place = file.replace(".pdf", "")
+
+        bus_data.append({
+            "source": place,
+            "destination": "Bangalore",
+            "bus_no": "KSRTC-" + place[:3].upper(),
+            "arrival": "10:30 AM"
+        })
+
+with open(OUTPUT_FILE, "w") as f:
+    json.dump(bus_data, f, indent=4)
+
+print("✅ ksrtc_buses.json created successfully!")
